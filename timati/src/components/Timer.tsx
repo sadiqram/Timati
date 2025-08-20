@@ -138,7 +138,7 @@ export default function Timer() {
             <p className="text-4xl font-mono mb-4">{formatTime(timeleft)}</p>
 
             {/* Controls */}
-            <div className="flex gap-2 cursor-pointer mb-4">
+            <div className="flex gap-2 cursor-pointer mb-4 ">
                 {!isRunning && !isPaused && (<Magnetic><button onClick = {startTimer}> Start </button></Magnetic>
             )}
 

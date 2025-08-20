@@ -1,5 +1,5 @@
 "use client";
-
+// reusing component from portfolio buttons
 import React, { useEffect, useRef, ReactNode } from 'react';
 import { gsap } from 'gsap';
 

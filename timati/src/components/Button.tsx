@@ -2,7 +2,7 @@
 import { ReactNode, useRef, useEffect } from "react";
 import gsap from "gsap";
 import Magnetic from "@/components/Magnetic";
-
+// reusing component from portfolio buttons
 interface ButtonProps {
   children: ReactNode;
 }

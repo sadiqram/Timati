@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-// import Timer from "@/Timer/Timer";
+import Button from "@/components/Button";
+
 
 
  
@@ -12,12 +13,15 @@ export default function Home() {
     <div>
       <div className= " flex flex-col items-center justify-center h-screen">
         <div className="border p-6 rounded-lg">
-        <p>Session Title</p>
-        <p>Session Type 1</p>
+        <div className=" justify-center text-2xl font-bold">Session Title</div>
+        
         <p>23:00</p>
-        <button>Start</button>
-        <button>Pause</button>
-        <button>Reset</button>
+        <div className="flex gap-2 cursor-pointer">
+        <Button>Start</Button>
+        <Button>Pause</Button>
+        <Button>Reset</Button>
+        </div>
+        <p>Session Type 1</p>
 
         </div>
       </div>

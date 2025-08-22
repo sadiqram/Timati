@@ -241,7 +241,7 @@ export default function Timer() {
             {( isPaused && !isFinished) && (<Magnetic><button onClick = {resumeTimer}> Resume </button></Magnetic>
             )}
                 
-            <Magnetic><button onClick = {resetTimer}> Reset </button></Magnetic>
+            {isRunning && (<Magnetic><button onClick = {resetTimer}> Reset </button></Magnetic>)}
             <Magnetic><button onClick = {endSession}> End Session </button></Magnetic>
             </div>
 

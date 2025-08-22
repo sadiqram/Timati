@@ -132,6 +132,11 @@ export default function Timer() {
     setIsRunning(false);
     setIsPaused(false);
     setIsFinished(false);
+    setCompletedSessions(0)
+
+    // reset to default pomodoro
+    setIsCustomPomodoro(false)
+    setSessionType("pomodoro")
     setTimeleft(settings.pomodoro);
  }
  const endSession = () => {

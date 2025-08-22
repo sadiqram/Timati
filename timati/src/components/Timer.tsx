@@ -110,11 +110,15 @@ export default function Timer() {
  }
 
  const formatTime = (time:number) => {
-    const minutes = Math.floor(time / 60)
-      .toString()
-      .padStart(2, "0");
-    const seconds = (time % 60).toString().padStart(2, "0");
-    return `${minutes}:${seconds}`; 
+    const hrs = Math.floor(time/3600)
+    const mins = Math.floor((time % 3600) / 60)
+    const secs = time % 60
+
+      if(hrs > 0) {
+        return  `${hrs}:${mins.toString().padStart(2,"0")}:${secs.toString().padStart(2,"0")
+        }`
+      } 
+      return `${mins}:${secs.toString().padStart(2,"0")}`
  }
 
  

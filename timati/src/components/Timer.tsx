@@ -51,13 +51,12 @@ export default function Timer() {
         setIsRunning(false);
         setIsPaused(false);
         setIsFinished(true);
-    }
-    setTimeout(() => {
         switchSession()
-    }, 1000)
+    }
+   
 
     return () => clearInterval(timer)
- }, [isRunning, isPaused,timeleft]);
+ }, [isRunning, isPaused,timeleft,isFinished]);
 
  const getProgress = () => {
     const totalTime = settings.pomodoro + settings.shortBreak + settings.longBreak;
@@ -103,6 +102,10 @@ export default function Timer() {
     setIsPaused(false);
     setIsFinished(false);
     setTimeleft(settings.pomodoro);
+ }
+ const endSession = () => {
+    setIsFinished(true)
+    switchSession()
  }
 
  const switchSession = () => {
@@ -152,6 +155,7 @@ export default function Timer() {
             )}
                 
             <Magnetic><button onClick = {resetTimer}> Reset </button></Magnetic>
+            <Magnetic><button onClick = {endSession}> End Session </button></Magnetic>
             </div>
 
 

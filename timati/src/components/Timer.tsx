@@ -47,7 +47,7 @@ export default function Timer() {
     } 
     
     //auto switch session to short break every pomo, and long break ever 4 pomos
-    if (timeleft === 0 && isFinished) {
+    if (timeleft === 0 && !isFinished) {
         setIsRunning(false);
         setIsPaused(false);
         setIsFinished(true);

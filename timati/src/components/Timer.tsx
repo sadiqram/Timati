@@ -4,13 +4,13 @@ import { time } from "console";
 import { useState, useEffect} from "react";
 import Button from "./Button";
 import Magnetic from "./Magnetic";
-type SessionType = "pomodoro" | "shortBreak" | "longBreak" | "custom";
+type SessionType = "pomodoro" | "shortBreak" | "longBreak" | "customPomodoro";
 
 interface TimerSettings{
     pomodoro: number;
     shortBreak: number;
     longBreak: number;
-    custom: number;
+    customPomodoro: number;
     cycles: number;
     isRunning: boolean;
     isPaused: boolean;
@@ -24,18 +24,32 @@ export default function Timer() {
   const [isPaused, setIsPaused] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [completedSessions, setCompletedSessions] = useState(0);
-  const [cycles, setCycles] = useState(0);
-  const [isCustomTime, setIsCustomTime] = useState(false);
+//   const [cycles, setCycles] = useState(0);
+
+  // Customize Pomodoro Settings
+  const [isCustomPomodoro, setIsCustomPomodoro] = useState(false)
+  const [customPomodoro,setCustomPomodoro] = useState(25)
+  const [customShortBreak, setCustomShortBreak] = useState(5);
+  const [customLongBreak, setCustomLongBreak] = useState(15);
+  
+  
+
+//   Custom Timer Settings
+//   const [isCustomTimer, setIsCustomTimer] = useState(false);
+//   const [customTimer,setCustomTimer] = useState(25)
+//   const [customCycles, setCustomCycles] = useState(4);
+  
   
  const settings : TimerSettings = {
     pomodoro: 25*60,
     shortBreak: 5*60,
     longBreak: 15*60,
-    custom: 0,
+    customPomodoro: 0,
     cycles: 4,
     isRunning: false,
     isPaused: false,
     isFinished: false,
+    
  }
  useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -70,10 +84,27 @@ export default function Timer() {
     setIsFinished(false);
 
     // Reset to correct seesion length when starting afresh
-    if (sessionType === "custom") {
-        setTimeleft(settings.custom);
-    } else {
-        setTimeleft(settings[sessionType]);
+    // if (sessionType === "custom") {
+    //     setTimeleft(settings.custom);
+    // } else {
+    //     setTimeleft(settings[sessionType]);
+    // }
+
+    // Dynamically compute durations from state, instead of mutating settings
+    if(isCustomPomodoro){
+        if(sessionType === "pomodoro" || sessionType === "customPomodoro"){
+            setTimeleft(customPomodoro * 60)
+
+        }
+        else if (sessionType === "shortBreak"){
+            setTimeleft(customShortBreak * 60)
+        }
+        else if(sessionType === "longBreak"){
+            setTimeleft(customLongBreak * 60)
+        }
+    }
+    else {
+        setTimeleft(settings[sessionType])
     }
 
  }
@@ -109,32 +140,74 @@ export default function Timer() {
  }
 
  const switchSession = () => {
-    if (sessionType === "pomodoro"){
+    if (sessionType === "pomodoro" || sessionType === "customPomodoro"){
         // finished a focus session
         setCompletedSessions((prev)=> prev + 1)
         // Only after every 4 Pomodoros, take a long break, else take short break
         if ((completedSessions + 1) % 4 === 0) {
             setSessionType("longBreak")
-            setTimeleft(settings.longBreak)
+            setTimeleft(isCustomPomodoro? customLongBreak * 60 : settings.longBreak)
         }
         else {
             setSessionType("shortBreak")
-            setTimeleft(settings.shortBreak) 
+            setTimeleft(isCustomPomodoro? customShortBreak* 60 : settings.shortBreak) 
         }
     }
-    else if (sessionType === "shortBreak" || sessionType === "longBreak"){
-        setSessionType("pomodoro")
-        setTimeleft(settings.pomodoro)
+    else {
+        setSessionType(isCustomPomodoro? "customPomodoro" : "pomodoro")
+        setTimeleft(isCustomPomodoro ? customPomodoro * 60 : settings.pomodoro)
     }
+
+
+
     //Reset state
     setIsFinished(false)
     setIsPaused(false)
-    setIsRunning(false)
+    setIsRunning(true) // auto-start next session
+
+ }
+ const handleCustomSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // update settings
+    settings.pomodoro = customPomodoro * 60;
+    settings.shortBreak = customShortBreak * 60;
+    settings.longBreak = customLongBreak * 60;
+
+    // set session type
+    setSessionType("customPomodoro");
+    setTimeleft(settings.pomodoro);
+    setIsCustomPomodoro(true)
 
  }
 
   return (
+    
+
   <div>
+    <form onSubmit={handleCustomSubmit} className="flex flex-col gap-2">
+  <label>
+    Pomodoro (minutes):
+    <input type="number" min="1" value={customPomodoro} onChange={(e) => setCustomPomodoro(Number(e.target.value))}/>
+  </label>
+
+  <label>
+    Short Break (minutes):
+    <input type="number" min="1" value={customShortBreak} onChange={(e) => setCustomShortBreak(Number(e.target.value))}/>
+  </label>
+
+  <label>
+    Long Break (minutes):
+    <input type="number" min="1" value={customLongBreak} onChange={(e) => setCustomLongBreak(Number(e.target.value))}/>
+  </label>
+
+  {/* <label>
+    Cycles before Long Break:
+    <input type="number" min="1" value={customCycles} onChange={(e) => setCustomCycles(Number(e.target.value))}/>
+  </label> */}
+<button type="submit">Cancel</button>
+  <button type="submit">Save Custom Settings</button>
+</form>
     <div className= " flex flex-col items-center justify-center h-screen">
         <div className="border p-6 rounded-lg text-center ">
             {/* Title */}

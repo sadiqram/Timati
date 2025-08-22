@@ -186,6 +186,15 @@ export default function Timer() {
 
  }
 
+ const cancelCustom = () => {
+  setIsCustomPomodoro(false);
+  setSessionType("pomodoro");
+  setTimeleft(settings.pomodoro);
+  setIsRunning(false);
+  setIsPaused(false);
+  setIsFinished(false);
+};
+
   return (
     
 
@@ -210,7 +219,7 @@ export default function Timer() {
     Cycles before Long Break:
     <input type="number" min="1" value={customCycles} onChange={(e) => setCustomCycles(Number(e.target.value))}/>
   </label> */}
-<button type="submit">Cancel</button>
+<button type="button" onClick={cancelCustom}>Cancel</button>
   <button type="submit">Save Custom Settings</button>
 </form>
     <div className= " flex flex-col items-center justify-center h-screen">

@@ -1,9 +1,11 @@
 "use client";
 
+
 import { time } from "console";
 import { useState, useEffect} from "react";
 import Button from "./Button";
 import Magnetic from "./Magnetic";
+import { IoSettingsSharp } from "react-icons/io5";
 type SessionType = "pomodoro" | "shortBreak" | "longBreak" | "customPomodoro";
 
 interface TimerSettings{
@@ -24,6 +26,7 @@ export default function Timer() {
   const [isPaused, setIsPaused] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [completedSessions, setCompletedSessions] = useState(0);
+  const [showSettings,setShowSettings] =useState(false)
 //   const [cycles, setCycles] = useState(0);
 
   // Customize Pomodoro Settings
@@ -203,7 +206,55 @@ export default function Timer() {
     
 
   <div>
-    <form onSubmit={handleCustomSubmit} className="flex flex-col gap-2">
+    {/* {showSettings && (
+    <form onSubmit={handleCustomSubmit} className="flex flex-col gap-2 mt-4">
+  <label>
+    Pomodoro (minutes):
+    <input type="number" min="1" value={customPomodoro} onChange={(e) => setCustomPomodoro(Number(e.target.value))}/>
+  </label>
+
+  <label>
+    Short Break (minutes):
+    <input type="number" min="1" value={customShortBreak} onChange={(e) => setCustomShortBreak(Number(e.target.value))}/>
+  </label>
+
+  <label>
+    Long Break (minutes):
+    <input type="number" min="1" value={customLongBreak} onChange={(e) => setCustomLongBreak(Number(e.target.value))}/>
+  </label>
+
+  <label>
+    Cycles before Long Break:
+    <input type="number" min="1" value={customCycles} onChange={(e) => setCustomCycles(Number(e.target.value))}/>
+  </label>
+<button type="button" onClick={cancelCustom}>Cancel</button>
+  <button type="submit">Save Custom Settings</button>
+</form>
+    )} */}
+    <div className= " flex flex-col items-center justify-center h-screen">
+        <div className="border p-6 rounded-lg text-center ">
+            {/* Title */}
+            <div className=" justify-center text-2xl font-bold">
+                {sessionType.toUpperCase()}
+            </div>
+            {/* Timer display */}
+            <p className="text-4xl font-mono mb-4">{formatTime(timeleft)}</p>
+
+            {/* Controls */}
+            <div className="flex gap-2 cursor-pointer mb-4 ">
+                {!isRunning && !isPaused && (<Magnetic><button onClick = {startTimer}> Start </button></Magnetic>
+            )}
+
+            {isRunning && !isPaused && (<Magnetic><button onClick = {pauseTimer}> Pause </button></Magnetic>
+            )}
+            {( isPaused && !isFinished) && (<Magnetic><button onClick = {resumeTimer}> Resume </button></Magnetic>
+            )}
+                
+            {isRunning && (<Magnetic><button onClick = {resetTimer}> Reset </button></Magnetic>)}
+            <Magnetic><button onClick = {endSession}> End Session </button></Magnetic>
+            <Magnetic><button onClick = {()=> setShowSettings(!showSettings)}> <IoSettingsSharp /> </button></Magnetic>
+            {showSettings && (
+    <form onSubmit={handleCustomSubmit} className="flex flex-col gap-2 mt-4">
   <label>
     Pomodoro (minutes):
     <input type="number" min="1" value={customPomodoro} onChange={(e) => setCustomPomodoro(Number(e.target.value))}/>
@@ -226,28 +277,11 @@ export default function Timer() {
 <button type="button" onClick={cancelCustom}>Cancel</button>
   <button type="submit">Save Custom Settings</button>
 </form>
-    <div className= " flex flex-col items-center justify-center h-screen">
-        <div className="border p-6 rounded-lg text-center ">
-            {/* Title */}
-            <div className=" justify-center text-2xl font-bold">
-                {sessionType.toUpperCase()}
+    )}
+            
+            
             </div>
-            {/* Timer display */}
-            <p className="text-4xl font-mono mb-4">{formatTime(timeleft)}</p>
-
-            {/* Controls */}
-            <div className="flex gap-2 cursor-pointer mb-4 ">
-                {!isRunning && !isPaused && (<Magnetic><button onClick = {startTimer}> Start </button></Magnetic>
-            )}
-
-            {isRunning && !isPaused && (<Magnetic><button onClick = {pauseTimer}> Pause </button></Magnetic>
-            )}
-            {( isPaused && !isFinished) && (<Magnetic><button onClick = {resumeTimer}> Resume </button></Magnetic>
-            )}
-                
-            {isRunning && (<Magnetic><button onClick = {resetTimer}> Reset </button></Magnetic>)}
-            <Magnetic><button onClick = {endSession}> End Session </button></Magnetic>
-            </div>
+            
 
 
 

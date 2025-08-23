@@ -200,6 +200,7 @@ export default function Timer() {
   setIsRunning(false);
   setIsPaused(false);
   setIsFinished(false);
+  setShowSettings(!showSettings)
 };
 
   return (

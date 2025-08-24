@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Button from "@/components/Button";
 import Timer from  "@/components/Timer"
+import Header from "@/components/Header"
 
 
 
@@ -11,6 +12,7 @@ import Timer from  "@/components/Timer"
 export default function Home() {
   return (
     <div>
+      <Header />
       <Timer />
     </div>
   );

@@ -9,9 +9,10 @@ export default function Nav() {
             <div>
                 <Link href="/">Timati</Link>
             </div>
-        <Link href="/">Sign In</Link>
+        
 
         <button>Settings</button>
+        <Link href="/">Sign In</Link>
 
         </nav>
 

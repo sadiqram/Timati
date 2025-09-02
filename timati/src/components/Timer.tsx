@@ -224,7 +224,7 @@ export default function Timer() {
       <div className=" flex flex-col items-center justify-center h-screen">
         <div className=" text-center ">
           {/* Title */}
-          <div className=" flex flex-row  align-center justify-center gap-4 text-2xl font-bold">
+          <div className=" flex flex-row  align-center justify-center  gap-4 text-2xl font-bold">
             {/* pomodoro, short break, long break, custom pomodoro */}
            
             <button onClick={() => changeSession("pomodoro")} className="">Pomodoro</button>
@@ -233,11 +233,11 @@ export default function Timer() {
 
           </div>
           {/* Timer display */}
-          <time className="text-9xl tracking-[-0.25rem] font-mono mb-4 "> {formatTime(timeleft)}</time>
+          <time className="text-9xl tracking-[-0.25rem] font-mono  "> {formatTime(timeleft)}</time>
           {/* <p className="text-9xl tracking-[-0.25rem] font-Roboto mb-4 ">{formatTime(timeleft)}</p> */}
 
           {/* Controls */}
-          <div className="flex items-center justify-center gap-2 cursor-pointer mb-4 ">
+          <div className="flex items-center justify-center gap-2 cursor-pointer mb-4 font-bold ">
             {!isRunning && !isPaused && (
               <Magnetic>
                 <button onClick={startTimer}> Start </button>

@@ -72,3 +72,40 @@ body {
   border-bottom-left-radius: calc(2rem - 1px);
 
 }
+
+.modal-header{
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 1.5rem;
+  border-bottom: 1px solid rgba(0,0,0,0);
+  border-top-left-radius: calc(2rem - 1px);
+  border-top-right-radius: calc(2rem - 1px);
+}
+
+.modal-body {
+  position: relative;
+  flex: 1 1 auto;
+  padding: 1rem 2rem;
+}
+
+.modal.show .modal-dialog {
+  transform: none;
+
+}
+
+.modal-dialog {
+  position: relative;
+  width: auto;
+  margin: .5rem;
+  pointer-events: none;
+}
+
+
+@media (min-width: 576px) {
+  .modal-dialog {
+    max-width: 600px;
+    margin: 3rem auto;
+  }
+}

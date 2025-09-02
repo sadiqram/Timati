@@ -329,9 +329,9 @@ export default function Timer() {
           </div>
         
         {/* Settings Modal */}
-        {/* {showSettingsModal && (
+        {showSettingsModal && (
           <Settings onClose={() => setShowSettingsModal(false)} />
-        )} */}
+        )}
       </div>
      
     </div>

@@ -168,6 +168,26 @@ export default function Timer() {
     setIsPaused(false);
     setIsRunning(true); // auto-start next session
   };
+
+  const changeSession = (newSessionType: SessionType) => {
+    setSessionType(newSessionType);
+    setIsRunning(false);
+    setIsPaused(false);
+    setIsFinished(false);
+    
+    // Set the appropriate time for the new session
+    if (isCustomPomodoro) {
+      if (newSessionType === "pomodoro" || newSessionType === "customPomodoro") {
+        setTimeleft(customPomodoro * 60);
+      } else if (newSessionType === "shortBreak") {
+        setTimeleft(customShortBreak * 60);
+      } else if (newSessionType === "longBreak") {
+        setTimeleft(customLongBreak * 60);
+      }
+    } else {
+      setTimeleft(settings[newSessionType]);
+    }
+  };
   const handleCustomSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -204,8 +224,13 @@ export default function Timer() {
       <div className=" flex flex-col items-center justify-center h-screen">
         <div className="border p-6 rounded-lg text-center ">
           {/* Title */}
-          <div className=" justify-center text-2xl font-bold">
-            {sessionType.toUpperCase()}
+          <div className=" flex flex-row  align-center justify-center gap-4 text-2xl font-bold">
+            {/* pomodoro, short break, long break, custom pomodoro */}
+           
+            <button onClick={() => changeSession("pomodoro")}>Pomodoro</button>
+            <button onClick={() => changeSession("shortBreak")}>Short Break</button>
+            <button onClick={() => changeSession("longBreak")}>Long Break</button>
+
           </div>
           {/* Timer display */}
           <p className="text-4xl font-mono mb-4">{formatTime(timeleft)}</p>
@@ -287,13 +312,17 @@ export default function Timer() {
               </form>
             )}
           </div>
-          {/* Spotify */}
-          <div className=" p-6 rounded-lg items-center justify-center">
-            <h3>Music</h3>
+          
+        </div>
+        {/* Spotify */}
+        
+        <div className=" p-6 rounded-lg items-center justify-center">
+           
             <SpotifyEmb playlistId={focusPlaylists["Deep Focus"]} />
           </div>
-        </div>
+        
       </div>
+     
     </div>
   );
 }

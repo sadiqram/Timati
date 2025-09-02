@@ -6,6 +6,7 @@ import Button from "./Button";
 import Magnetic from "./Magnetic";
 import { IoSettingsSharp } from "react-icons/io5";
 import SpotifyEmb from "./SpotifyEmb";
+import Settings from "./Settings";
 
 type SessionType = "pomodoro" | "shortBreak" | "longBreak" | "customPomodoro";
 
@@ -28,6 +29,7 @@ export default function Timer() {
   const [isFinished, setIsFinished] = useState(false);
   const [completedSessions, setCompletedSessions] = useState(0);
   const [showSettings, setShowSettings] = useState(false);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
   //   const [cycles, setCycles] = useState(0);
 
   // Customize Pomodoro Settings
@@ -227,9 +229,9 @@ export default function Timer() {
           <div className=" flex flex-row  align-center justify-center  gap-4 text-2xl font-bold">
             {/* pomodoro, short break, long break, custom pomodoro */}
            
-            <button onClick={() => changeSession("pomodoro")} className="">Pomodoro</button>
-            <button onClick={() => changeSession("shortBreak")}>Short Break</button>
-            <button onClick={() => changeSession("longBreak")}>Long Break</button>
+            <button onClick={() => changeSession("pomodoro")} className="glowy-button">Pomodoro</button>
+            <button onClick={() => changeSession("shortBreak")} className="glowy-button">Short Break</button>
+            <button onClick={() => changeSession("longBreak")} className="glowy-button">Long Break</button>
 
           </div>
           {/* Timer display */}
@@ -240,35 +242,35 @@ export default function Timer() {
           <div className="flex items-center justify-center gap-2 cursor-pointer mb-4 font-bold ">
             {!isRunning && !isPaused && (
               <Magnetic>
-                <button onClick={startTimer}> Start </button>
+                <button onClick={startTimer} className="glowy-button"> Start </button>
               </Magnetic>
             )}
 
             {isRunning && !isPaused && (
               <Magnetic>
-                <button onClick={pauseTimer}> Pause </button>
+                <button onClick={pauseTimer} className="glowy-button"> Pause </button>
               </Magnetic>
             )}
             {isPaused && !isFinished && (
               <Magnetic>
-                <button onClick={resumeTimer}> Resume </button>
+                <button onClick={resumeTimer} className="glowy-button"> Resume </button>
               </Magnetic>
             )}
 
             {isRunning && (
               <Magnetic>
-                <button onClick={resetTimer}> Reset </button>
+                <button onClick={resetTimer}  className="glowy-button"> Reset </button>
               </Magnetic>
             )}
              {isRunning && (
             <Magnetic>
-              <button onClick={endSession}> End Session </button>
+              <button onClick={endSession} className="glowy-button"> End Session </button>
             </Magnetic>
             )}
             
 
             <Magnetic>
-              <button onClick={() => setShowSettings(!showSettings)}>
+              <button onClick={() => setShowSettingsModal(true)}>
                 {" "}
                 <IoSettingsSharp />{" "}
               </button>
@@ -326,6 +328,10 @@ export default function Timer() {
             <SpotifyEmb playlistId={focusPlaylists["Deep Focus"]} />
           </div>
         
+        {/* Settings Modal */}
+        {/* {showSettingsModal && (
+          <Settings onClose={() => setShowSettingsModal(false)} />
+        )} */}
       </div>
      
     </div>

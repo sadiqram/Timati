@@ -28,7 +28,7 @@ body {
   @apply cursor-pointer bg-[white] shadow-[rgb(0_0_0_/_5%)_0_0_8px] tracking-[1.5px] uppercase text-[15px] transition-all duration-[0.5s] ease-[ease] px-10 py-[17px] rounded-[50px] border-0 hover:tracking-[3px] hover:bg-[hsl(261deg_80%_48%)] hover:text-white hover:shadow-[rgb(93_24_220)_0px_7px_29px_0px] active:tracking-[3px] active:bg-[hsl(261deg_80%_48%)] active:text-white active:shadow-[rgb(93_24_220)_0px_0px_0px_0px] active:translate-y-2.5 active:transition-[100ms];
 } */
 
-button{
+.glowy-button{
   cursor: pointer;
   padding: 17px 40px;
   border-radius: 50px;
@@ -43,18 +43,32 @@ button{
 
 }
 
-button:hover {
+.glowy-button:hover {
   letter-spacing: 3px;
   background-color: hsl(261deg 80% 48%);
   color: hsl(0, 0%, 100%);
   box-shadow: rgb(93 24 220) 0px 7px 29px 0px;
 }
 
-button:active {
+.glowy-button:active {
   letter-spacing: 3px;
   background-color: hsl(261deg 80% 48%);
   color: hsl(0, 0%, 100%);
   box-shadow: rgb(93 24 220) 0px 0px 0px 0px;
   transform: translateY(10px);
   transition: 100ms;
+}
+
+.modal-footer{
+  padding: .75rem 2.5rem 1.55rem;
+  display: flex;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: flex-end;
+  /* padding: 1rem 2rem-0.25rem; */
+  border-top: 1px solid rgba(0,0,0,0);
+  border-bottom-right-radius: calc(2rem - 1px);
+  border-bottom-left-radius: calc(2rem - 1px);
+
 }

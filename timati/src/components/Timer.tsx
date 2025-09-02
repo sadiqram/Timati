@@ -222,18 +222,19 @@ export default function Timer() {
   return (
     <div className="flex items-center justify-center">
       <div className=" flex flex-col items-center justify-center h-screen">
-        <div className="border p-6 rounded-lg text-center ">
+        <div className=" text-center ">
           {/* Title */}
           <div className=" flex flex-row  align-center justify-center gap-4 text-2xl font-bold">
             {/* pomodoro, short break, long break, custom pomodoro */}
            
-            <button onClick={() => changeSession("pomodoro")}>Pomodoro</button>
+            <button onClick={() => changeSession("pomodoro")} className="">Pomodoro</button>
             <button onClick={() => changeSession("shortBreak")}>Short Break</button>
             <button onClick={() => changeSession("longBreak")}>Long Break</button>
 
           </div>
           {/* Timer display */}
-          <p className="text-4xl font-mono mb-4">{formatTime(timeleft)}</p>
+          <time className="text-9xl tracking-[-0.25rem] font-mono mb-4 "> {formatTime(timeleft)}</time>
+          {/* <p className="text-9xl tracking-[-0.25rem] font-Roboto mb-4 ">{formatTime(timeleft)}</p> */}
 
           {/* Controls */}
           <div className="flex items-center justify-center gap-2 cursor-pointer mb-4 ">
@@ -259,9 +260,13 @@ export default function Timer() {
                 <button onClick={resetTimer}> Reset </button>
               </Magnetic>
             )}
+             {isRunning && (
             <Magnetic>
               <button onClick={endSession}> End Session </button>
             </Magnetic>
+            )}
+            
+
             <Magnetic>
               <button onClick={() => setShowSettings(!showSettings)}>
                 {" "}

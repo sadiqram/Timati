@@ -1,19 +1,8 @@
 import { createClient } from "@supabase/supabase-js";
-import { env } from "process";
 
 
 
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
-const supabase = createClient(
-    // import.meta.env.NEXT_PUBLIC_SUPABASE_URL,
-    // import.meta.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
-//example sign in
-
-// const {data,error} = await supabase.auth.signInWithPassword({
-//     email: "test@example.com",
-//     password: "mypassword"
-// })
-export default supabase;
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);

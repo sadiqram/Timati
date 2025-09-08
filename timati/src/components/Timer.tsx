@@ -7,8 +7,9 @@ import Magnetic from "./Magnetic";
 import { IoSettingsSharp } from "react-icons/io5";
 import SpotifyEmb from "./SpotifyEmb";
 import Settings from "./Settings";
+import { useSettings } from "@/contexts/SettingsContext";
 
-type SessionType = "pomodoro" | "shortBreak" | "longBreak" | "customPomodoro";
+type SessionType = "pomodoro" | "shortBreak" | "longBreak";
 
 interface TimerSettings {
   pomodoro: number;
@@ -22,7 +23,8 @@ interface TimerSettings {
 }
 
 export default function Timer() {
-  const [timeleft, setTimeleft] = useState(25 * 60);
+  const { settings } = useSettings();
+  const [timeleft, setTimeleft] = useState(settings.pomodoro * 60);
   const [sessionType, setSessionType] = useState<SessionType>("pomodoro");
   const [isRunning, setIsRunning] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -30,29 +32,13 @@ export default function Timer() {
   const [completedSessions, setCompletedSessions] = useState(0);
   const [showSettings, setShowSettings] = useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
-  //   const [cycles, setCycles] = useState(0);
 
-  // Customize Pomodoro Settings
-  const [isCustomPomodoro, setIsCustomPomodoro] = useState(false);
-  const [customPomodoro, setCustomPomodoro] = useState(25);
-  const [customShortBreak, setCustomShortBreak] = useState(5);
-  const [customLongBreak, setCustomLongBreak] = useState(15);
-
-  //   Custom Timer Settings
-  //   const [isCustomTimer, setIsCustomTimer] = useState(false);
-  //   const [customTimer,setCustomTimer] = useState(25)
-  //   const [customCycles, setCustomCycles] = useState(4);
-
-  const settings: TimerSettings = {
-    pomodoro: 25 * 60,
-    shortBreak: 5 * 60,
-    longBreak: 15 * 60,
-    customPomodoro: 0,
-    cycles: 4,
-    isRunning: false,
-    isPaused: false,
-    isFinished: false,
-  };
+  // Update timer when settings change
+  useEffect(() => {
+    if (!isRunning && !isPaused) {
+      setTimeleft(settings[sessionType] * 60);
+    }
+  }, [settings, sessionType, isRunning, isPaused]);
   useEffect(() => {
     let timer: NodeJS.Timeout;
 
@@ -74,8 +60,7 @@ export default function Timer() {
   }, [isRunning, isPaused, timeleft, isFinished]);
 
   const getProgress = () => {
-    const totalTime =
-      settings.pomodoro + settings.shortBreak + settings.longBreak;
+    const totalTime = (settings.pomodoro + settings.shortBreak + settings.longBreak) * 60;
     const progress = (timeleft / totalTime) * 100;
     return progress;
   };
@@ -85,25 +70,8 @@ export default function Timer() {
     setIsPaused(false);
     setIsFinished(false);
 
-    // Reset to correct seesion length when starting afresh
-    // if (sessionType === "custom") {
-    //     setTimeleft(settings.custom);
-    // } else {
-    //     setTimeleft(settings[sessionType]);
-    // }
-
-    // Dynamically compute durations from state, instead of mutating settings
-    if (isCustomPomodoro) {
-      if (sessionType === "pomodoro" || sessionType === "customPomodoro") {
-        setTimeleft(customPomodoro * 60);
-      } else if (sessionType === "shortBreak") {
-        setTimeleft(customShortBreak * 60);
-      } else if (sessionType === "longBreak") {
-        setTimeleft(customLongBreak * 60);
-      }
-    } else {
-      setTimeleft(settings[sessionType]);
-    }
+    // Set timer to the current session duration from settings
+    setTimeleft(settings[sessionType] * 60);
   };
 
   const formatTime = (time: number) => {
@@ -135,9 +103,8 @@ export default function Timer() {
     setCompletedSessions(0);
 
     // reset to default pomodoro
-    setIsCustomPomodoro(false);
     setSessionType("pomodoro");
-    setTimeleft(settings.pomodoro);
+    setTimeleft(settings.pomodoro * 60);
   };
   const endSession = () => {
     setIsFinished(true);
@@ -145,30 +112,26 @@ export default function Timer() {
   };
 
   const switchSession = () => {
-    if (sessionType === "pomodoro" || sessionType === "customPomodoro") {
+    if (sessionType === "pomodoro") {
       // finished a focus session
       setCompletedSessions((prev) => prev + 1);
       // Only after every 4 Pomodoros, take a long break, else take short break
       if ((completedSessions + 1) % 4 === 0) {
         setSessionType("longBreak");
-        setTimeleft(
-          isCustomPomodoro ? customLongBreak * 60 : settings.longBreak
-        );
+        setTimeleft(settings.longBreak * 60);
       } else {
         setSessionType("shortBreak");
-        setTimeleft(
-          isCustomPomodoro ? customShortBreak * 60 : settings.shortBreak
-        );
+        setTimeleft(settings.shortBreak * 60);
       }
     } else {
-      setSessionType(isCustomPomodoro ? "customPomodoro" : "pomodoro");
-      setTimeleft(isCustomPomodoro ? customPomodoro * 60 : settings.pomodoro);
+      setSessionType("pomodoro");
+      setTimeleft(settings.pomodoro * 60);
     }
 
     //Reset state
     setIsFinished(false);
     setIsPaused(false);
-    setIsRunning(true); // auto-start next session
+    setIsRunning(settings.autoStartBreaks || settings.autoStartPomodoros); // auto-start based on settings
   };
 
   const changeSession = (newSessionType: SessionType) => {
@@ -178,40 +141,7 @@ export default function Timer() {
     setIsFinished(false);
     
     // Set the appropriate time for the new session
-    if (isCustomPomodoro) {
-      if (newSessionType === "pomodoro" || newSessionType === "customPomodoro") {
-        setTimeleft(customPomodoro * 60);
-      } else if (newSessionType === "shortBreak") {
-        setTimeleft(customShortBreak * 60);
-      } else if (newSessionType === "longBreak") {
-        setTimeleft(customLongBreak * 60);
-      }
-    } else {
-      setTimeleft(settings[newSessionType]);
-    }
-  };
-  const handleCustomSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // update settings
-    settings.pomodoro = customPomodoro * 60;
-    settings.shortBreak = customShortBreak * 60;
-    settings.longBreak = customLongBreak * 60;
-
-    // set session type
-    setSessionType("customPomodoro");
-    setTimeleft(settings.pomodoro);
-    setIsCustomPomodoro(true);
-  };
-
-  const cancelCustom = () => {
-    setIsCustomPomodoro(false);
-    setSessionType("pomodoro");
-    setTimeleft(settings.pomodoro);
-    setIsRunning(false);
-    setIsPaused(false);
-    setIsFinished(false);
-    setShowSettings(!showSettings);
+    setTimeleft(settings[newSessionType] * 60);
   };
 
   const focusPlaylists = {
@@ -275,49 +205,6 @@ export default function Timer() {
                 <IoSettingsSharp />{" "}
               </button>
             </Magnetic>
-            {showSettings && (
-              <form
-                onSubmit={handleCustomSubmit}
-                className="flex flex-col gap-2 mt-4"
-              >
-                <label>
-                  Pomodoro (minutes):
-                  <input
-                    type="number"
-                    min="1"
-                    value={customPomodoro}
-                    onChange={(e) => setCustomPomodoro(Number(e.target.value))}
-                  />
-                </label>
-
-                <label>
-                  Short Break (minutes):
-                  <input
-                    type="number"
-                    min="1"
-                    value={customShortBreak}
-                    onChange={(e) =>
-                      setCustomShortBreak(Number(e.target.value))
-                    }
-                  />
-                </label>
-
-                <label>
-                  Long Break (minutes):
-                  <input
-                    type="number"
-                    min="1"
-                    value={customLongBreak}
-                    onChange={(e) => setCustomLongBreak(Number(e.target.value))}
-                  />
-                </label>
-
-                <button type="button" onClick={cancelCustom}>
-                  Cancel
-                </button>
-                <button type="submit">Save Custom Settings</button>
-              </form>
-            )}
           </div>
           
         </div>

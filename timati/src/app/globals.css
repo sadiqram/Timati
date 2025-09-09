@@ -3,6 +3,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --accent: 99 102 241; /* indigo-500 fallback */
 }
 
 @theme inline {
@@ -12,12 +13,21 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Mode switching via data attribute */
+:root[data-mode='light'] {
+  --background: #ffffff;
+  --foreground: #171717;
 }
+
+:root[data-mode='dark'] {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+}
+
+/* Accent switching */
+:root[data-accent='blue'] { --accent: 59 130 246; }
+:root[data-accent='green'] { --accent: 34 197 94; }
+:root[data-accent='purple'] { --accent: 168 85 247; }
 
 body {
   background: var(--background);
@@ -45,18 +55,25 @@ body {
 
 .glowy-button:hover {
   letter-spacing: 3px;
-  background-color: hsl(261deg 80% 48%);
+  background-color: rgb(var(--accent));
   color: hsl(0, 0%, 100%);
-  box-shadow: rgb(93 24 220) 0px 7px 29px 0px;
+  box-shadow: rgba(var(--accent) / 1) 0px 7px 29px 0px;
 }
 
 .glowy-button:active {
   letter-spacing: 3px;
-  background-color: hsl(261deg 80% 48%);
+  background-color: rgb(var(--accent));
   color: hsl(0, 0%, 100%);
-  box-shadow: rgb(93 24 220) 0px 0px 0px 0px;
+  box-shadow: rgba(var(--accent) / 1) 0px 0px 0px 0px;
   transform: translateY(10px);
   transition: 100ms;
+}
+
+/* Active session glow utility */
+.glowy-active {
+  background-color: rgb(var(--accent));
+  color: #fff;
+  box-shadow: rgba(var(--accent) / 1) 0px 7px 29px 0px;
 }
 
 .modal-footer{

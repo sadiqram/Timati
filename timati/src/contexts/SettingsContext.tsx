@@ -12,6 +12,9 @@ export interface TimerSettings {
   soundType: 'bell' | 'chime' | 'ocean' | 'melody'
   autoStartBreaks: boolean
   autoStartPomodoros: boolean
+  // Theme
+  themeMode: 'light' | 'dark' | 'system'
+  accent: 'blue' | 'green' | 'purple'
 }
 
 interface SettingsContextType {
@@ -31,6 +34,8 @@ const defaultSettings: TimerSettings = {
   soundType: 'bell',
   autoStartBreaks: false,
   autoStartPomodoros: false,
+  themeMode: 'system',
+  accent: 'blue',
 }
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined)

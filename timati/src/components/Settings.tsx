@@ -153,38 +153,48 @@ export default function Settings({ onClose }: SettingsProps) {
             {activeSection === 'theme' && (
               <div className="space-y-6">
                 <h3 className="text-lg font-semibold text-gray-800">Themes</h3>
-                <h4 className='text-gray-800'>Select theme</h4>                
-                
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                    <div>
-                      {/* <h4 className="font-medium text-black">Dark Mode</h4>
-                      <p className="text-sm text-gray-800">Switch between light and dark themes</p> */}
-                    </div>
-                    {/* <label className="relative inline-flex items-center cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={isDarkMode}
-                        onChange={(e) => setIsDarkMode(e.target.checked)}
-                        className="sr-only peer"
-                      />
-                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                    </label> */}
-                  </div>
-                  {/* allow for select themes */}
+                <h4 className='text-gray-800'>Appearance</h4>
 
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                    <div className="p-4 border-2 border-gray-200 rounded-lg text-center cursor-pointer">
-                      <div className="w-12 h-12 bg-blue-500 rounded-lg mx-auto mb-2"></div>
-                      <span className="text-sm font-medium text-gray-800">Blue</span>
+                <div className="space-y-6">
+                  {/* Mode selection */}
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <h4 className="font-medium text-gray-800 mb-2">Theme Mode</h4>
+                    <div className="flex gap-2">
+                      {(['light','dark','system'] as const).map(mode => (
+                        <button
+                          key={mode}
+                          onClick={() => updateSettings({ themeMode: mode })}
+                          className={`px-3 py-2 rounded border text-sm ${
+                            settings.themeMode === mode ? 'border-blue-500 bg-blue-50 text-gray-800' : 'border-gray-300 hover:border-gray-400 text-gray-800'
+                          }`}
+                        >
+                          {mode[0].toUpperCase() + mode.slice(1)}
+                        </button>
+                      ))}
                     </div>
-                    <div className="p-4 border-2 border-gray-200 rounded-lg text-center cursor-pointer">
-                      <div className="w-12 h-12 bg-green-500 rounded-lg mx-auto mb-2"></div>
-                      <span className="text-sm font-medium text-gray-800">Green</span>
-                    </div>
-                    <div className="p-4 border-2 border-gray-200 rounded-lg text-center cursor-pointer">
-                      <div className="w-12 h-12 bg-purple-500 rounded-lg mx-auto mb-2"></div>
-                      <span className="text-sm font-medium text-gray-800">Purple</span>
+                  </div>
+
+                  {/* Accent selection */}
+                  <div>
+                    <h4 className='text-gray-800 mb-2'>Accent color</h4>
+                    <div className="grid grid-cols-3 gap-4">
+                      {([
+                        { id: 'blue', class: 'bg-blue-500' },
+                        { id: 'green', class: 'bg-green-500' },
+                        { id: 'purple', class: 'bg-purple-500' },
+                      ] as const).map(accent => (
+                        <button
+                          key={accent.id}
+                          onClick={() => updateSettings({ accent: accent.id })}
+                          className={`p-4 border-2 rounded-lg text-center cursor-pointer ${
+                            settings.accent === accent.id ? 'border-blue-500' : 'border-gray-200'
+                          }`}
+                          aria-label={`Select ${accent.id} accent`}
+                        >
+                          <div className={`w-12 h-12 ${accent.class} rounded-lg mx-auto mb-2`}></div>
+                          <span className="text-sm font-medium text-gray-800 capitalize">{accent.id}</span>
+                        </button>
+                      ))}
                     </div>
                   </div>
                 </div>

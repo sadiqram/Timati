@@ -159,9 +159,9 @@ export default function Timer() {
           <div className=" flex flex-row  align-center justify-center  gap-4 text-2xl font-bold">
             {/* pomodoro, short break, long break, custom pomodoro */}
            
-            <button onClick={() => changeSession("pomodoro")} className="glowy-button">Pomodoro</button>
-            <button onClick={() => changeSession("shortBreak")} className="glowy-button">Short Break</button>
-            <button onClick={() => changeSession("longBreak")} className="glowy-button">Long Break</button>
+            <button onClick={() => changeSession("pomodoro")} className={`glowy-button ${sessionType === "pomodoro" ? 'glowy-active' : ''}`}>Pomodoro</button>
+            <button onClick={() => changeSession("shortBreak")} className={`glowy-button ${sessionType === "shortBreak" ? 'glowy-active' : ''}`}>Short Break</button>
+            <button onClick={() => changeSession("longBreak")} className={`glowy-button ${sessionType === "longBreak" ? 'glowy-active' : ''}`}>Long Break</button>
 
           </div>
           {/* Timer display */}
@@ -199,12 +199,13 @@ export default function Timer() {
             )}
             
 
-            <Magnetic>
+            
               <button onClick={() => setShowSettingsModal(true)}>
                 {" "}
-                <IoSettingsSharp />{" "}
+                <IoSettingsSharp className="cursor-pointer ml-3" size={32}/>{" "}
               </button>
-            </Magnetic>
+              
+           
           </div>
           
         </div>

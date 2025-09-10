@@ -8,6 +8,7 @@ import { IoSettingsSharp } from "react-icons/io5";
 import SpotifyEmb from "./SpotifyEmb";
 import Settings from "./Settings";
 import { useSettings } from "@/contexts/SettingsContext";
+import { permission } from "process";
 
 type SessionType = "pomodoro" | "shortBreak" | "longBreak";
 
@@ -53,6 +54,9 @@ export default function Timer() {
       setIsRunning(false);
       setIsPaused(false);
       setIsFinished(true);
+
+      notifyUser()
+      
       switchSession();
     }
 
@@ -151,6 +155,56 @@ export default function Timer() {
     "Nature Sounds": "37i9dQZF1DX4PP3DA4J0N8",
   };
 
+  // sound notis
+  const playSound = () => {
+    if (!settings.soundEnabled) {
+      console.log("Sound disabled in settings");
+      return;
+    }
+    
+    const soundFiles = {
+      bell: "/sounds/bells.mp3",
+      chime: "/sounds/chime.mp3", 
+      ocean: "/sounds/ocean.mp3",
+      melody: "/sounds/melody.mp3"
+    };
+    
+    const soundFile = soundFiles[settings.soundType] || soundFiles.bell;
+    console.log("Playing sound:", soundFile, "Volume:", settings.volume);
+    
+    const audio = new Audio(soundFile);
+    audio.volume = settings.volume / 100;
+    audio.play().catch((err) => {
+      console.log("Sound play error:", err);
+    })
+  }
+  
+
+  // User notifications
+  const notifyUser = () => {
+    // Play sound regardless of notification permission
+    playSound();
+    
+    // Only show desktop notification if enabled in settings
+    if (!settings.notificationsEnabled) return;
+    
+    if(Notification.permission === "granted"){
+      new Notification("Pomodoro Finished",{
+        body: "Time for a break"
+      })
+    }
+    // Only request if permission has not been previously denied or granted
+    else if(Notification.permission !=="denied"){
+      Notification.requestPermission().then((perm) => {
+        if(perm === "granted"){
+          new Notification("Pomodoro Finished",{
+            body: "Time for a break"
+          })
+        }
+      })
+    }
+  }
+
   return (
     <div className="flex items-center justify-center">
       <div className=" flex flex-col items-center justify-center h-screen">
@@ -205,6 +259,13 @@ export default function Timer() {
                 <IoSettingsSharp className="cursor-pointer ml-3" size={32}/>{" "}
               </button>
               
+              {/* Test sound button - remove this later */}
+              <button 
+                onClick={playSound}
+                className="glowy-button ml-2 text-sm"
+              >
+                Test Sound
+              </button>
            
           </div>
           
